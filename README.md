@@ -1,16 +1,14 @@
 # daily_planner
 
-A new Flutter project.
+App to track daily activities, notes, schedules, goals [Daily, Monthly, Annual]
 
-## Getting Started
+# Project Milestones
 
-This project is a starting point for a Flutter application.
+    1. Release application with daily planner.
+    2. Add monthly planning
+    3. Add annual planning
+    4. Tally all the todos and adjust next month planning accordingly.
 
-A few resources to get you started if this is your first Flutter project:
+# Current Progress
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+    1. [WIP] Daily Planner
