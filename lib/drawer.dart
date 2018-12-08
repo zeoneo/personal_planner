@@ -45,6 +45,14 @@ class AppDrawer extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          ListTile(
+            title: Text('Add Custome Planner'),
+            selected: selectedItem == 3,
+            onTap: () {
+              onNavigationChanged(3);
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );

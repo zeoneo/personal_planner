@@ -13,7 +13,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedPlanner = 0;
-  List<String> titles = ["Daily Planner", "Monthly Planner", "Annual Planner"];
+  List<String> titles = [
+    "Daily Planner",
+    "Monthly Planner",
+    "Annual Planner",
+    "Add Custom Planner",
+  ];
 
   void _setSelectedPlanner(int _index) {
     setState(() {
@@ -47,10 +52,6 @@ class _MyHomePageState extends State<MyHomePage> {
       drawer: AppDrawer(
           selectedItem: _selectedPlanner,
           onNavigationChanged: _setSelectedPlanner),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
     );
   }
 }

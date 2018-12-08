@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'daily_planner_view/schedule_view.dart';
+import 'daily_planner_view/schedule_component.dart';
 import 'daily_planner_view/goals_view.dart';
 import 'daily_planner_view/todo_view.dart';
 import 'daily_planner_view/motivation_view.dart';
@@ -47,7 +47,7 @@ class DailyPlannerState extends State<DailyPlanner> {
       crossAxisSpacing: 10.0,
       crossAxisCount: 2,
       children: <Widget>[
-        new ScheduleView(),
+        new ScheduleComponent(),
         new GoalsView(),
         new TodoView(),
         new MotivationView(),
