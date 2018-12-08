@@ -6,7 +6,11 @@ import 'schedule_expanded.dart';
 import '../../model/ScheduleItem.dart';
 
 class ScheduleComponent extends StatefulWidget {
-  ScheduleComponent({Key key}) : super(key: key);
+  ScheduleComponent({Key key, @required this.title, @required this.collection})
+      : super(key: key);
+
+  final String title;
+  final String collection;
 
   @override
   ScheduleComponentState createState() {
@@ -15,7 +19,6 @@ class ScheduleComponent extends StatefulWidget {
 }
 
 class ScheduleComponentState extends State<ScheduleComponent> {
-  //Prop
   List<ScheduleItem> scheduleItems = [];
 
   @override
@@ -33,10 +36,9 @@ class ScheduleComponentState extends State<ScheduleComponent> {
   _refreshData() {
     DateTime now = DateTime.now();
     DateTime today = new DateTime(now.year, now.month, now.day);
-    int _today = today.millisecondsSinceEpoch;
 
     Firestore.instance
-        .collection('schedule')
+        .collection(widget.collection)
         .where("from", isGreaterThanOrEqualTo: today)
         .snapshots()
         .listen((data) {
@@ -59,9 +61,9 @@ class ScheduleComponentState extends State<ScheduleComponent> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Text("Schedule"),
+                new Text(widget.title),
                 FloatingActionButton(
-                  tooltip: "Add today's schedule",
+                  tooltip: "Add today's item",
                   child: Icon(Icons.add),
                   backgroundColor: Color.fromRGBO(10, 150, 20, 1),
                   elevation: 1,
@@ -69,9 +71,13 @@ class ScheduleComponentState extends State<ScheduleComponent> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ExpandedSchedule(
+                        builder: (context) => ExpandedSchedule(
                               scheduleItems: scheduleItems,
-                              refreshCallback: _refreshData)),
+                              refreshCallback: _refreshData,
+                              title: widget.title,
+                              collection: widget.collection,
+                            ),
+                      ),
                     );
                   },
                 )
@@ -79,13 +85,18 @@ class ScheduleComponentState extends State<ScheduleComponent> {
             ),
           )
         : new ScheduleCard(
+            title: widget.title,
             onScheduleClick: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ExpandedSchedule(
-                          scheduleItems: scheduleItems,
-                        )),
+                  builder: (context) => ExpandedSchedule(
+                        scheduleItems: scheduleItems,
+                        refreshCallback: _refreshData,
+                        title: widget.title,
+                        collection: widget.collection,
+                      ),
+                ),
               );
             },
             scheduleItems: scheduleItems);

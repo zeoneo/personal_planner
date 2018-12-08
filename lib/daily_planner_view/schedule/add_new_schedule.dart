@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'schedule_expanded.dart';
 
 typedef void RefreshCallback1();
 
 class NewScheduleItem extends StatefulWidget {
-  NewScheduleItem({Key key, this.refreshCallback1}) : super(key: key);
+  NewScheduleItem({
+    Key key,
+    @required this.title,
+    @required this.collection,
+    @required this.refreshCallback1,
+  }) : super(key: key);
 
+  final String title;
+  final String collection;
   final RefreshCallback1 refreshCallback1;
   @override
   NewScheduleItemState createState() {
@@ -21,16 +27,22 @@ class NewScheduleItemState extends State<NewScheduleItem> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text("Add new Item Schedule"),
+        title: new Text("Add new Item"),
       ),
-      body: MyCustomForm(),
+      body: MyCustomForm(
+        refreshCallback1: refreshCallback1,
+        collection: widget.collection,
+        title: widget.title,
+      ),
     );
   }
 }
 
 class MyCustomForm extends StatefulWidget {
-  MyCustomForm({Key key, this.refreshCallback1});
+  MyCustomForm({Key key, this.refreshCallback1, this.collection, this.title});
   final RefreshCallback1 refreshCallback1;
+  final String title;
+  final String collection;
   @override
   MyCustomFormState createState() {
     return MyCustomFormState();
@@ -44,6 +56,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   // us to validate the form
   //
   // Note: This is a GlobalKey<FormState>, not a GlobalKey<MyCustomFormState>!
+
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
 
@@ -66,7 +79,7 @@ class MyCustomFormState extends State<MyCustomForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
-            decoration: InputDecoration(labelText: 'Schedule Item Name'),
+            decoration: InputDecoration(labelText: 'Item Name'),
             controller: myController,
             validator: (value) {
               if (value.isEmpty) {
@@ -111,10 +124,16 @@ class MyCustomFormState extends State<MyCustomForm> {
                       _fromTime.hour, _fromTime.minute);
                   DateTime _to = new DateTime(now.year, now.month, now.day,
                       _toTime.hour, _toTime.minute);
-                  print("from");
+                  print("from: " + widget.collection);
                   print(_from.millisecondsSinceEpoch);
-                  Firestore.instance.collection('schedule').document().setData(
-                      {'title': myController.text, 'from': _from, 'to': _to});
+                  Firestore.instance
+                      .collection(widget.collection)
+                      .document()
+                      .setData({
+                    'title': myController.text,
+                    'from': _from,
+                    'to': _to
+                  });
                   widget.refreshCallback1();
                 }
               },

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'daily_planner_view/schedule/index.dart';
-import 'daily_planner_view/goals/index.dart';
-import 'daily_planner_view/todos/index.dart';
-import 'daily_planner_view/motivations/index.dart';
 
 class Schedule {
   const Schedule(
@@ -28,10 +25,6 @@ class Goal {
 class DailyPlanner extends StatefulWidget {
   DailyPlanner({Key key}) : super(key: key);
 
-  List<Todo> todos;
-  List<Schedule> scheduleItems;
-  List<Goal> goals;
-
   @override
   DailyPlannerState createState() {
     return new DailyPlannerState();
@@ -47,10 +40,22 @@ class DailyPlannerState extends State<DailyPlanner> {
       crossAxisSpacing: 10.0,
       crossAxisCount: 2,
       children: <Widget>[
-        new ScheduleComponent(),
-        new GoalsComponent(),
-        new TodosComponent(),
-        new MotivationsComponent(),
+        new ScheduleComponent(
+          collection: 'schedule',
+          title: 'Schedule',
+        ),
+        new ScheduleComponent(
+          collection: 'goals',
+          title: 'Goals',
+        ),
+        new ScheduleComponent(
+          collection: 'todos',
+          title: 'Todos',
+        ),
+        new ScheduleComponent(
+          collection: 'motivations',
+          title: 'Motivations',
+        ),
       ],
     );
   }
