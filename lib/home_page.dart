@@ -23,7 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _setSelectedPlanner(int _index) {
     setState(() {
       _selectedPlanner = _index;
-      _getDrawerItemScreen(_index);
     });
   }
 
