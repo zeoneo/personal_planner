@@ -6,6 +6,7 @@ import 'package:daily_planner/model/ScheduleItem.dart';
 import 'add_new_schedule.dart';
 
 typedef void RefreshCallback();
+typedef void DeleteCallback(String documentId);
 
 class ExpandedSchedule extends StatelessWidget {
   ExpandedSchedule({
@@ -14,13 +15,17 @@ class ExpandedSchedule extends StatelessWidget {
     @required this.title,
     @required this.collection,
     @required this.refreshCallback,
+    @required this.deleteCallback,
   }) : super(key: key);
   final List<ScheduleItem> scheduleItems;
   final String title;
   final String collection;
   final RefreshCallback refreshCallback;
+  final DeleteCallback deleteCallback;
   @override
   Widget build(BuildContext context) {
+    print("Build Called on Expanaded Schedule");
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Today's " + title),
@@ -28,15 +33,35 @@ class ExpandedSchedule extends StatelessWidget {
       body: new DragAndDropList<ScheduleItem>(
         scheduleItems,
         itemBuilder: (BuildContext context, item) {
-          return new SizedBox(
-            child: new Card(
-                child: new ListTile(
-              title: Text(item.itemDetail),
-              subtitle: Text((new DateFormat.jm()).format(item.startTime) +
-                  " -> " +
-                  (new DateFormat.jm()).format(item.endTime)),
-            )),
+          return Dismissible(
+            // Each Dismissible must contain a Key. Keys allow Flutter to
+            // uniquely identify Widgets.
+            key: Key(item.itemDetail),
+            // We also need to provide a function that tells our app
+            // what to do after an item has been swiped away.
+            onDismissed: (direction) {
+              // Remove the item from our data source.
+              deleteCallback(item.documentKey);
+
+              // Then show a snackbar!
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text("$item dismissed")));
+            },
+            // Show a red background as the item is swiped away
+            background: Container(color: Colors.red),
+            child: ListTile(title: Text(item.itemDetail)),
           );
+
+          // new SizedBox(
+          //   child: new Card(
+          //     child: new ListTile(
+          //       title: Text(item.itemDetail),
+          //       subtitle: Text((new DateFormat.jm()).format(item.startTime) +
+          //           " -> " +
+          //           (new DateFormat.jm()).format(item.endTime)),
+          //     ),
+          //   ),
+          // );
         },
         onDragFinish: (before, after) {
           ScheduleItem data = scheduleItems[before];

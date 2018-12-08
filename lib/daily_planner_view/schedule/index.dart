@@ -29,8 +29,17 @@ class ScheduleComponentState extends State<ScheduleComponent> {
 
   _changeData(List<ScheduleItem> _items) {
     setState(() {
+      print("Changing Items");
       scheduleItems = _items;
     });
+  }
+
+  _deleteRecord(documentId) {
+    Firestore.instance
+        .collection(widget.collection)
+        .document(documentId)
+        .delete();
+    _refreshData();
   }
 
   _refreshData() {
@@ -44,6 +53,7 @@ class ScheduleComponentState extends State<ScheduleComponent> {
         .listen((data) {
       List<ScheduleItem> _items = [];
       data.documents.forEach((doc) => _items.add(ScheduleItem(
+          documentKey: doc.documentID,
           itemDetail: doc.data["title"],
           startTime: (doc.data["from"]),
           endTime: (doc.data["to"]))));
@@ -76,6 +86,7 @@ class ScheduleComponentState extends State<ScheduleComponent> {
                               refreshCallback: _refreshData,
                               title: widget.title,
                               collection: widget.collection,
+                              deleteCallback: _deleteRecord,
                             ),
                       ),
                     );
@@ -95,6 +106,7 @@ class ScheduleComponentState extends State<ScheduleComponent> {
                         refreshCallback: _refreshData,
                         title: widget.title,
                         collection: widget.collection,
+                        deleteCallback: _deleteRecord,
                       ),
                 ),
               );

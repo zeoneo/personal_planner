@@ -1,8 +1,15 @@
+import 'package:flutter/material.dart';
+
 class ScheduleItem {
-  const ScheduleItem(
-      {this.itemDetail, this.startTime, this.endTime, this.isCompleted});
+  const ScheduleItem({
+    Key key,
+    @required this.itemDetail,
+    @required this.startTime,
+    @required this.endTime,
+    @required this.documentKey,
+  });
   final String itemDetail;
   final DateTime startTime;
   final DateTime endTime;
-  final bool isCompleted;
+  final String documentKey;
 }
